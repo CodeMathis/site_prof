@@ -1,7 +1,9 @@
 "use client";
+
 import React, { useEffect, useState, CSSProperties, Suspense, lazy } from 'react';
 import { faArrowLeft, faArrowRight, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 
 // Dynamically import components
 const Accueil = lazy(() => import('@/components/Accueil'));
@@ -12,44 +14,43 @@ const Contact = lazy(() => import('@/components/Contact'));
 const Connexion = lazy(() => import('@/components/Connexion'));
 
 const topMenuItems = [
-    { key: '0', label: '', href: '' },
-    { key: '1', label: 'ACCUEIL', href: '#accueil' },
-    { key: '2', label: 'COURS', href: '#cours' },
-    { key: '3', label: 'QUIZZ', href: '#quizz' },
-    { key: '4', label: 'E-CLASSE', href: '#eclasse' },
-    { key: '5', label: '', href: '' },
+    { key: '0', label: '', path: '' },
+    { key: '1', label: 'ACCUEIL', path: '/' },
+    { key: '2', label: 'COURS', path: '/cours' },
+    { key: '3', label: 'QUIZZ', path: '/quizz' },
+    { key: '4', label: 'E-CLASSE', path: '/eclasse' },
+    { key: '5', label: '', path: '' },
 ];
 
 const bottomMenuItems = [
-    { key: '0', label: '', href: '' },
-    { key: '1', label: 'CONTACT', href: '#contact' },
-    { key: '2', label: 'CONNEXION', href: '#connexion' },
-    { key: '3', label: '', href: '' },
+    { key: '0', label: '', path: '' },
+    { key: '1', label: 'CONTACT', path: '/contact' },
+    { key: '2', label: 'CONNEXION', path: '/connexion' },
+    { key: '3', label: '', path: '' },
 ];
 
 function MenuBar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1280);
+    const [isMobileView, setIsMobileView] = useState(false);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
-    // Toggle the menu bar
-    const toggleMenu = () => setIsCollapsed(prev => !prev);
-    const handleSelectItem = (item: string) => setSelectedItem(item);
+    const location = useLocation();
 
-    // Check if the window is resized to mobile view
+    // Détection de l'onglet sélectionné en fonction de l'URL actuelle
+    useEffect(() => {
+        const path = location.pathname;
+        const allMenuItems = [...topMenuItems, ...bottomMenuItems];
+        const matchedItem = allMenuItems.find(item => item.path === path);
+        if (matchedItem) {
+            setSelectedItem(matchedItem.label);
+        }
+    }, [location]);
+
     useEffect(() => {
         const handleResize = () => setIsMobileView(window.innerWidth < 1280);
         window.addEventListener('resize', handleResize);
         handleResize(); // Check initial size on mount
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    // Check if the hash in the URL matches a menu item
-    useEffect(() => {
-        const hash = window.location.hash.substring(1);
-        const allMenuItems = [...topMenuItems, ...bottomMenuItems];
-        const matchedItem = allMenuItems.find(item => item.href.substring(1) === hash);
-        if (matchedItem) handleSelectItem(matchedItem.label);
     }, []);
 
     // Render menu items
@@ -68,26 +69,26 @@ function MenuBar() {
                         textAlign: isMobileView ? 'center' : 'left',
                         paddingLeft: isMobileView ? '0' : '40px',
                     }}>
-                        {item.label === '' ?
-                            <a style={{ ...styles.navLink, color: '#000', padding: isMobileView ? '0' : '10px 0' }}></a> :
-                            <a
-                                href={item.href}
+                        {item.label === '' ? (
+                            <p style={{ ...styles.navLink, color: '#000', padding: isMobileView ? '0' : '10px 0' }}></p>
+                        ) : (
+                            <Link
+                                to={item.path}
                                 style={{
                                     ...styles.navLink,
                                     color: isSelected ? '#000' : '#ffffcc',
                                     fontSize: isMobileView ? '24px' : '38px',
                                 }}
-                                onClick={() => handleSelectItem(item.label)}
+                                onClick={() => setSelectedItem(item.label)}
                             >
                                 {item.label}
-                            </a>
-                        }
+                            </Link>
+                        )}
                     </li>
                 </div>
             );
         });
 
-    // Render the menu bar and main content
     return (
         <div style={styles.mainContainer}>
             <div style={{ ...styles.menuContainer, width: isCollapsed ? '75px' : isMobileView ? '100%' : '20%' }}>
@@ -103,18 +104,20 @@ function MenuBar() {
                         {renderMenuItems(bottomMenuItems)}
                     </ul>
                 </nav>
-                <div style={styles.toggleButton} onClick={toggleMenu}>
+                <div style={styles.toggleButton} onClick={() => setIsCollapsed(!isCollapsed)}>
                     <FontAwesomeIcon icon={isCollapsed ? faArrowRight : faArrowLeft} />
                 </div>
             </div>
             <div style={{ ...styles.contentContainer, marginLeft: isCollapsed ? '75px' : isMobileView ? '0' : '20%' }}>
                 <Suspense fallback={<div style={styles.loading}>Loading...</div>}>
-                    {selectedItem === 'ACCUEIL' && <Accueil />}
-                    {selectedItem === 'COURS' && <Cours />}
-                    {selectedItem === 'QUIZZ' && <Quizz />}
-                    {selectedItem === 'E-CLASSE' && <EClasse />}
-                    {selectedItem === 'CONTACT' && <Contact />}
-                    {selectedItem === 'CONNEXION' && <Connexion />}
+                    <Routes>
+                        <Route path="/" element={<Accueil />} />
+                        <Route path="/cours" element={<Cours />} />
+                        <Route path="/quizz" element={<Quizz />} />
+                        <Route path="/eclasse" element={<EClasse />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/connexion" element={<Connexion />} />
+                    </Routes>
                 </Suspense>
             </div>
         </div>
@@ -185,4 +188,10 @@ const styles: { [key: string]: CSSProperties } = {
     }
 };
 
-export default MenuBar;
+export default function App() {
+    return (
+        <Router>
+            <MenuBar />
+        </Router>
+    );
+}
