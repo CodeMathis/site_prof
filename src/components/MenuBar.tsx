@@ -58,21 +58,23 @@ function MenuBar() {
             const isBelowSelected = selectedItem && items[index - 1]?.label === selectedItem;
 
             return (
-                <div key={item.key} style={{backgroundColor: '#ffffcc'}}>
+                <div key={item.key} style={{backgroundColor: "#ffffcc"}}>
                     <li style={{
                         ...styles.navItem,
                         backgroundColor: isSelected ? '#ffffcc' : '#000',
-                        borderRadius: isAboveSelected ? (isMobileView ? '0 0 20px 0' : '0 0 40px 0') : isBelowSelected ? (isMobileView ? '0 20px 0 0' : '0 40px 0 0') : ('0'),
+                        borderRadius: isAboveSelected ? (isMobileView ? '0 0 20px 0' : '0 0 40px 0') : isBelowSelected ? (isMobileView ? '0 20px 0 0' : '0 40px 0 0') : '0',
                         textAlign: isMobileView ? 'center' : 'left',
                         paddingLeft: isMobileView ? '0' : '40px',
                     }}>
                         {item.label === '' ?
-                            <a style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc', padding: isMobileView ? '0' : '10px 0'}}></a> :
+                            <a style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc', padding: isMobileView ? '0' : '10px 0' }}></a> :
                             <a
                                 href={item.href}
-                                style={{ ...styles.navLink,
+                                style={{
+                                    ...styles.navLink,
                                     color: isSelected ? '#000' : '#ffffcc',
-                                    fontSize: isMobileView ? '24px' : '38px',}}
+                                    fontSize: isMobileView ? '24px' : '38px',
+                                }}
                                 onClick={() => handleSelectItem(item.label)}
                             >
                                 {item.label}
@@ -83,9 +85,9 @@ function MenuBar() {
             );
         });
 
-    // Render the menu bar
+    // Render the menu bar and main content
     return (
-        <>
+        <div style={styles.mainContainer}>
             <div style={{ ...styles.menuContainer, width: isCollapsed ? '75px' : isMobileView ? '100%' : '20%' }}>
                 <nav style={styles.navBar}>
                     <div style={styles.iconContainer}>
@@ -103,24 +105,31 @@ function MenuBar() {
                     <FontAwesomeIcon icon={isCollapsed ? faArrowRight : faArrowLeft} />
                 </div>
             </div>
-            {selectedItem === 'ACCUEIL' && <Accueil />}
-            {selectedItem === 'COURS' && <Cours />}
-            {selectedItem === 'QUIZZ' && <Quizz />}
-            {selectedItem === 'E-CLASSE' && <EClasse />}
-            {selectedItem === 'CONTACT' && <Contact />}
-            {selectedItem === 'CONNEXION' && <Connexion />}
-        </>
+            <div style={{...styles.contentContainer, marginLeft : isCollapsed ? '75px' : isMobileView ? '0' : '20%'}}>
+                {selectedItem === 'ACCUEIL' && <Accueil />}
+                {selectedItem === 'COURS' && <Cours />}
+                {selectedItem === 'QUIZZ' && <Quizz />}
+                {selectedItem === 'E-CLASSE' && <EClasse />}
+                {selectedItem === 'CONTACT' && <Contact />}
+                {selectedItem === 'CONNEXION' && <Connexion />}
+            </div>
+        </div>
     );
 }
 
 const styles: { [key: string]: CSSProperties } = {
+    mainContainer: {
+        display: 'flex',
+        height: '100vh',
+        backgroundColor: '#ffffcc',
+    },
     menuContainer: {
         display: 'flex',
         flexDirection: 'column',
         position: 'fixed',
         left: 0,
         top: 0,
-        height: '100vh',
+        height: '100%',
         backgroundColor: 'black',
         transition: 'width 0.5s ease',
     },
@@ -149,7 +158,6 @@ const styles: { [key: string]: CSSProperties } = {
     },
     navLink: {
         textDecoration: 'none',
-        fontSize: '38px',
         display: 'block',
         transition: 'color 0.3s ease',
     },
@@ -160,7 +168,14 @@ const styles: { [key: string]: CSSProperties } = {
         cursor: 'pointer',
         textAlign: 'center',
         fontSize: '30px',
-    }
+    },
+    contentContainer: {
+        flex: 1,
+        padding: '20px',
+        overflowY: 'auto',
+        transition: 'margin 0.5s ease',
+    },
+    // Additional style for mobile view, if needed
 };
 
 export default MenuBar;
