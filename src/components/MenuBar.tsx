@@ -1,13 +1,15 @@
 "use client";
-import React, { useEffect, useState, CSSProperties } from 'react';
+import React, { useEffect, useState, CSSProperties, Suspense, lazy } from 'react';
 import { faArrowLeft, faArrowRight, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Accueil from "@/components/Accueil";
-import Cours from "@/components/Cours";
-import Quizz from "@/components/Quizz";
-import EClasse from "@/components/EClasse";
-import Contact from "@/components/Contact";
-import Connexion from "@/components/Connexion";
+
+// Dynamically import components
+const Accueil = lazy(() => import('@/components/Accueil'));
+const Cours = lazy(() => import('@/components/Cours'));
+const Quizz = lazy(() => import('@/components/Quizz'));
+const EClasse = lazy(() => import('@/components/EClasse'));
+const Contact = lazy(() => import('@/components/Contact'));
+const Connexion = lazy(() => import('@/components/Connexion'));
 
 const topMenuItems = [
     { key: '0', label: '', href: '' },
@@ -58,7 +60,7 @@ function MenuBar() {
             const isBelowSelected = selectedItem && items[index - 1]?.label === selectedItem;
 
             return (
-                <div key={item.key} style={{backgroundColor: "#ffffcc"}}>
+                <div key={item.key} style={{ backgroundColor: "#ffffcc" }}>
                     <li style={{
                         ...styles.navItem,
                         backgroundColor: isSelected ? '#ffffcc' : '#000',
@@ -105,13 +107,15 @@ function MenuBar() {
                     <FontAwesomeIcon icon={isCollapsed ? faArrowRight : faArrowLeft} />
                 </div>
             </div>
-            <div style={{...styles.contentContainer, marginLeft : isCollapsed ? '75px' : isMobileView ? '0' : '20%'}}>
-                {selectedItem === 'ACCUEIL' && <Accueil />}
-                {selectedItem === 'COURS' && <Cours />}
-                {selectedItem === 'QUIZZ' && <Quizz />}
-                {selectedItem === 'E-CLASSE' && <EClasse />}
-                {selectedItem === 'CONTACT' && <Contact />}
-                {selectedItem === 'CONNEXION' && <Connexion />}
+            <div style={{ ...styles.contentContainer, marginLeft: isCollapsed ? '75px' : isMobileView ? '0' : '20%' }}>
+                <Suspense fallback={<div style={styles.loading}>Loading...</div>}>
+                    {selectedItem === 'ACCUEIL' && <Accueil />}
+                    {selectedItem === 'COURS' && <Cours />}
+                    {selectedItem === 'QUIZZ' && <Quizz />}
+                    {selectedItem === 'E-CLASSE' && <EClasse />}
+                    {selectedItem === 'CONTACT' && <Contact />}
+                    {selectedItem === 'CONNEXION' && <Connexion />}
+                </Suspense>
             </div>
         </div>
     );
@@ -175,7 +179,9 @@ const styles: { [key: string]: CSSProperties } = {
         overflowY: 'auto',
         transition: 'margin 0.5s ease',
     },
-    // Additional style for mobile view, if needed
+    loading: {
+        fontSize: '38px',
+    }
 };
 
 export default MenuBar;
