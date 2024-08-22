@@ -136,6 +136,7 @@ const styles: { [key: string]: CSSProperties } = {
         height: '100%',
         backgroundColor: 'black',
         transition: 'width 0.5s ease',
+        zIndex: 999,
     },
     navBar: {
         padding: '10px 0 0 0',
