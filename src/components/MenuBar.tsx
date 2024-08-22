@@ -30,9 +30,11 @@ function MenuBar() {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1280);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
+    // Toggle the menu bar
     const toggleMenu = () => setIsCollapsed(prev => !prev);
     const handleSelectItem = (item: string) => setSelectedItem(item);
 
+    // Check if the window is resized to mobile view
     useEffect(() => {
         const handleResize = () => setIsMobileView(window.innerWidth < 1280);
         window.addEventListener('resize', handleResize);
@@ -40,6 +42,7 @@ function MenuBar() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Check if the hash in the URL matches a menu item
     useEffect(() => {
         const hash = window.location.hash.substring(1);
         const allMenuItems = [...topMenuItems, ...bottomMenuItems];
@@ -47,6 +50,7 @@ function MenuBar() {
         if (matchedItem) handleSelectItem(matchedItem.label);
     }, []);
 
+    // Render menu items
     const renderMenuItems = (items: typeof topMenuItems | typeof bottomMenuItems) =>
         items.map((item, index) => {
             const isSelected = selectedItem === item.label;
@@ -77,6 +81,7 @@ function MenuBar() {
             );
         });
 
+    // Render the menu bar
     return (
         <>
             <div style={{ ...styles.menuContainer, width: isCollapsed ? '75px' : isMobileView ? '100%' : '20%' }}>
