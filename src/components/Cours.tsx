@@ -16,7 +16,7 @@ const chapitres = [
 function Cours() {
     return (
         <div style={styles.container}>
-            <h1 style={styles.heading}>Chapitres</h1>
+            <h1 style={styles.heading}>Tous les chapitres</h1>
             <div style={styles.grid}>
                 {chapitres.map(chapitre => (
                     <div key={chapitre.id} style={{...styles.chapter, backgroundImage: `url(${chapitre.image})`}}>
@@ -36,6 +36,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     heading: {
         textAlign: 'center',
+        lineHeight: '40px',
         marginBottom: '38px',
     },
     grid: {
