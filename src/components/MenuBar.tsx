@@ -3,7 +3,11 @@
 import React, { useEffect, useState, CSSProperties, Suspense, lazy } from 'react';
 import { faArrowLeft, faArrowRight, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
+import dynamic from "next/dynamic";
+import {Routes, Route, useLocation, Link } from 'react-router-dom';
+
+// Charger BrowserRouter uniquement côté client
+const BrowserRouter = dynamic(() => import('react-router-dom').then(mod => mod.BrowserRouter), { ssr: false });
 
 // Dynamically import components
 const Accueil = lazy(() => import('@/components/Accueil'));
@@ -38,7 +42,11 @@ function MenuBar() {
 
     // Détection de l'onglet sélectionné en fonction de l'URL actuelle
     useEffect(() => {
-        const path = location.pathname;
+        let path = location.pathname;
+        //if there is / in the path, remove it and get the first part of the path
+        if (path.includes('/') && path.length > 1) {
+            path = path.split('/')[1];
+        }
         const allMenuItems = [...topMenuItems, ...bottomMenuItems];
         const matchedItem = allMenuItems.find(item => item.path === path);
         if (matchedItem) {
@@ -190,8 +198,8 @@ const styles: { [key: string]: CSSProperties } = {
 
 export default function App() {
     return (
-        <Router>
+        <BrowserRouter>
             <MenuBar />
-        </Router>
+        </BrowserRouter>
     );
 }

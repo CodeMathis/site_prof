@@ -1,7 +1,12 @@
 "use client";
-import React from 'react';
 
-// Exemple de données des chapitres
+import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import {useLocation} from "react-router-dom";
+
+// Chargement dynamique du composant Chapitre
+const Chapitre = lazy(() => import('@/components/Chapitre'));
+
 const chapitres = [
     { id: 1, nom: 'Chapitre 1: Identités et échanges', image: 'https://via.placeholder.com/400x300' },
     { id: 2, nom: 'Chapitre 2: Espace privé et espace public', image: 'https://via.placeholder.com/400x300' },
@@ -14,12 +19,36 @@ const chapitres = [
 ];
 
 function Cours() {
+    const [selectedChapitre, setSelectedChapitre] = useState<number | null>(null);
+    const location = useLocation();
+
+    // Détection de l'onglet sélectionné, remet selectedChapitre à null si l'url est http://localhost:3000/cours
+    useEffect(() => {
+        if (location.pathname === '/cours') {
+            setSelectedChapitre(null);
+        }
+    }, [location]);
+
+
+    if (selectedChapitre !== null) {
+        // Charge dynamiquement le composant Chapitre si un chapitre est sélectionné
+        return (
+            <Suspense fallback={<div style={{fontSize: '38px'}}>Chargement du chapitre...</div>}>
+                <Chapitre chapitreId={selectedChapitre} />
+            </Suspense>
+        );
+    }
+
     return (
         <div style={styles.container}>
             <h1 style={styles.heading}>Tous les chapitres</h1>
             <div style={styles.grid}>
                 {chapitres.map(chapitre => (
-                    <div key={chapitre.id} style={{...styles.chapter, backgroundImage: `url(${chapitre.image})`}}>
+                    <div
+                        key={chapitre.id}
+                        style={{ ...styles.chapter, backgroundImage: `url(${chapitre.image})` }}
+                        onClick={() => setSelectedChapitre(chapitre.id)}
+                    >
                         <div style={styles.overlay}>
                             <h3 style={styles.text}>{chapitre.nom}</h3>
                         </div>
@@ -56,6 +85,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
+        cursor: 'pointer', // Ajouté pour indiquer que c'est cliquable
     },
     overlay: {
         position: 'absolute',
