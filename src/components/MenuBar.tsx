@@ -62,15 +62,17 @@ function MenuBar() {
                     <li style={{
                         ...styles.navItem,
                         backgroundColor: isSelected ? '#ffffcc' : '#000',
-                        borderRadius: isAboveSelected ? '0 0 40px 0' : isBelowSelected ? '0 40px 0 0' : '0',
+                        borderRadius: isAboveSelected ? (isMobileView ? '0 0 20px 0' : '0 0 40px 0') : isBelowSelected ? (isMobileView ? '0 20px 0 0' : '0 40px 0 0') : ('0'),
                         textAlign: isMobileView ? 'center' : 'left',
                         paddingLeft: isMobileView ? '0' : '40px',
                     }}>
                         {item.label === '' ?
-                            <a style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc', padding: "10px 0" }}></a> :
+                            <a style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc', padding: isMobileView ? '0' : '10px 0'}}></a> :
                             <a
                                 href={item.href}
-                                style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc' }}
+                                style={{ ...styles.navLink,
+                                    color: isSelected ? '#000' : '#ffffcc',
+                                    fontSize: isMobileView ? '24px' : '38px',}}
                                 onClick={() => handleSelectItem(item.label)}
                             >
                                 {item.label}
