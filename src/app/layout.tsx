@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet"/>
       </head>
-      <body className={`${inter.className} lilita-one-regular`}>{children}</body>
+      <body className={`${inter.className}`}>{children}</body>
     </html>
   );
 }

@@ -37,3 +37,19 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+h1{
+  font-size: 38px;
+}
+
+h2{
+  font-size: 34px;
+}
+
+h3{
+  font-size: 30px;
+}
+
+p{
+  font-size: 24px;
+}
