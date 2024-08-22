@@ -3,14 +3,14 @@ import React from 'react';
 
 // Exemple de données des chapitres
 const chapitres = [
-    { id: 1, nom: 'Chapitre 1 Identités et échanges', image: 'https://via.placeholder.com/400x300' },
-    { id: 2, nom: 'Chapitre 2 Espace privé et espace public', image: 'https://via.placeholder.com/400x300' },
-    { id: 3, nom: 'Chapitre 3 Art et pouvoir', image: 'https://via.placeholder.com/400x300' },
-    { id: 4, nom: 'Chapitre 4 Citoyenneté et mondes virtuels', image: 'https://via.placeholder.com/400x300' },
-    { id: 5, nom: 'Chapitre 5 Fictions et réalités', image: 'https://via.placeholder.com/400x300' },
-    { id: 6, nom: 'Chapitre 6 Innovations scientifiques et responsabilité', image: 'https://via.placeholder.com/400x300' },
-    { id: 7, nom: 'Chapitre 7 Diversité et inclusion', image: 'https://via.placeholder.com/400x300' },
-    { id: 8, nom: 'Chapitre 8 Territoire et mémoire', image: 'https://via.placeholder.com/400x300' },
+    { id: 1, nom: 'Chapitre 1: Identités et échanges', image: 'https://via.placeholder.com/400x300' },
+    { id: 2, nom: 'Chapitre 2: Espace privé et espace public', image: 'https://via.placeholder.com/400x300' },
+    { id: 3, nom: 'Chapitre 3: Art et pouvoir', image: 'https://via.placeholder.com/400x300' },
+    { id: 4, nom: 'Chapitre 4: Citoyenneté et mondes virtuels', image: 'https://via.placeholder.com/400x300' },
+    { id: 5, nom: 'Chapitre 5: Fictions et réalités', image: 'https://via.placeholder.com/400x300' },
+    { id: 6, nom: 'Chapitre 6: Innovations scientifiques et responsabilité', image: 'https://via.placeholder.com/400x300' },
+    { id: 7, nom: 'Chapitre 7: Diversité et inclusion', image: 'https://via.placeholder.com/400x300' },
+    { id: 8, nom: 'Chapitre 8: Territoire et mémoire', image: 'https://via.placeholder.com/400x300' },
 ];
 
 function Cours() {
