@@ -63,13 +63,13 @@ function MenuBar() {
                 <div key={item.key} style={{ backgroundColor: "#ffffcc" }}>
                     <li style={{
                         ...styles.navItem,
-                        backgroundColor: isSelected ? '#ffffcc' : '#000',
+                        backgroundColor: isSelected && item.label !== '' ? '#ffffcc' : '#000',
                         borderRadius: isAboveSelected ? (isMobileView ? '0 0 20px 0' : '0 0 40px 0') : isBelowSelected ? (isMobileView ? '0 20px 0 0' : '0 40px 0 0') : '0',
                         textAlign: isMobileView ? 'center' : 'left',
                         paddingLeft: isMobileView ? '0' : '40px',
                     }}>
                         {item.label === '' ?
-                            <a style={{ ...styles.navLink, color: isSelected ? '#000' : '#ffffcc', padding: isMobileView ? '0' : '10px 0' }}></a> :
+                            <a style={{ ...styles.navLink, color: '#000', padding: isMobileView ? '0' : '10px 0' }}></a> :
                             <a
                                 href={item.href}
                                 style={{
