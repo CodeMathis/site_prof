@@ -29,7 +29,18 @@ const bottomMenuItems = [
 
 function MenuBar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1280);
+    const [isMobileView, setIsMobileView] = useState(false);
+
+    useEffect(() => {
+        // 2. Cette fonction ne s'exécute que côté client
+        const handleResize = () => setIsMobileView(window.innerWidth < 1280);
+        
+        // Définir la valeur réelle immédiatement au montage
+        handleResize();
+    
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
     // Toggle the menu bar
